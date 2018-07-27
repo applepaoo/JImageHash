@@ -74,7 +74,7 @@ public class example {
 				System.out.println("A_Hash Diatance:" + A_dis);
 				System.out.println("P_Hash Diatance:" + P_dis);
 				System.out.println("Similarity: " + jpHash.getSimilarity(hash1, hash2));
-				System.out.println("-----------");
+				System.out.println("------------");
 
 			}
 
