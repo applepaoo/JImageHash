@@ -61,7 +61,7 @@ public class example {
 								.replaceAll(" ", "0");
 
 				System.out.println(filenames[i]);
-				//System.out.println("A_Hash_fingerPrint: " + A_binaryHash2);
+				// System.out.println("A_Hash_fingerPrint: " + A_binaryHash2);
 				System.out.println("A_Hash_fingerPrint: " + new_A_binaryHash2);
 				System.out.println("P_Hash_fingerPrint: " + P_binaryHash2);
 
@@ -85,10 +85,7 @@ public class example {
 		// if (file.isDirectory()) {
 		//
 		// filenames = file.list();
-		//
-		// HashingAlgorithm hasher = new AverageHash(bitResolution);
-		// HashingAlgorithm hasher2 = new PerceptiveHash(bitResolution);
-		//
+
 		// String newHash1 = String
 		// .format("%16s%16s", hasher.hash(img1).toString(16),
 		// hasher2.hash(img1).toString(16))
@@ -97,13 +94,7 @@ public class example {
 		// .format("%16s%16s", hasher.hash(img2).toString(16),
 		// hasher2.hash(img2).toString(16))
 		// .replaceAll(" ", "0");
-		//
-		// int dis = hammingDistance(new BigInteger(newHash1, 16), new
-		// BigInteger(newHash2, 16));
-		// System.out.println(in + ", dis= " + dis);
-		// System.out.println("hash_Goods1: " + newHash1);
-		// System.out.println("hash_Goods2: " + newHash2);
-		//
+
 		// }
 		//
 		// }
@@ -116,9 +107,4 @@ public class example {
 		return i.xor(i2).bitCount();
 	}
 
-	public static String hexToBinary(String hexnumber) {
-		BigInteger temp = new BigInteger(hexnumber, 16);
-		return temp.toString(2);
-
-	}
 }
