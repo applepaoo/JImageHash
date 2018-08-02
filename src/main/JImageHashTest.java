@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Scanner;
 
 import javax.imageio.IIOException;
 import javax.imageio.ImageIO;
@@ -29,8 +30,14 @@ public class JImageHashTest {
 	public static void main(String[] args) throws IOException, ParseException {
 
 		int bitResolution = 64;
+		
+		System.out.println("inputPath: ");
+		Scanner scanner = new Scanner(System.in);
+		String inputPath = scanner.nextLine();
+		System.out.println("outputPath: ");
+		String outputPath = scanner.next();
 
-		File file = new File("test.txt"); // 讀取測試檔
+		File file = new File(inputPath); // 讀取測試檔
 		FileReader fileReader = new FileReader(file);
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
 		StringBuffer stringBuffer = new StringBuffer();
@@ -44,7 +51,7 @@ public class JImageHashTest {
 		String[] arrayBF = stringBuffer.toString().split("}");// 切割字串
 		JSONParser parser = new JSONParser();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
-		FileWriter fw = new FileWriter("jimageTEST_Output");
+		FileWriter fw = new FileWriter(outputPath);
 
 		for (int i = 0; i < arrayBF.length - 1; i++) { // 拚imagePath
 
