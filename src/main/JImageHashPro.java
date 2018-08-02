@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.imageio.IIOException;
 import javax.imageio.ImageIO;
 
 import org.json.simple.JSONObject;
@@ -44,7 +45,7 @@ public class JImageHashPro {
 			String[] arrayBF = stringBuffer.toString().split("}");// 切割字串
 			JSONParser parser = new JSONParser();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
-			FileWriter fw = new FileWriter("jimageOutput");
+			FileWriter fw = new FileWriter("jimagePro_Output");
 
 			for (int i = 0; i < arrayBF.length - 1; i++) { // 拚imagePath
 
@@ -97,7 +98,9 @@ public class JImageHashPro {
 							System.out.println(String.valueOf(file2)); // 印出路徑
 							System.out.println(jsonObject1); // 印出json
 
-						} catch (Exception e) {
+						} catch (IIOException e) {
+
+							e.printStackTrace();
 
 						}
 
