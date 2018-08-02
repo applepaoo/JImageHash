@@ -69,31 +69,38 @@ public class JImageHashPro {
 
 					} else if (file2.exists() && !file2.isDirectory()) {
 
-						Date current = new Date();
+						try {
 
-						// JImagaHash
-						HashingAlgorithm hasher = new AverageHash(bitResolution);
-						HashingAlgorithm hasher2 = new PerceptiveHash(bitResolution);
-						BufferedImage img = (BufferedImage) ImageIO.read(file2);
-						String jimagePHash = String.valueOf(hasher2.hash(img).toString(16));
-						String jimageAHash = String.valueOf(hasher.hash(img).toString(16));
+							Date current = new Date();
 
-						// jphash
-						RadialHash hash = jpHash.getImageRadialHash("/mnt/" + imagePath);
-						String jpHash = String.valueOf(hash);
+							// JImagaHash
+							HashingAlgorithm hasher = new AverageHash(bitResolution);
+							HashingAlgorithm hasher2 = new PerceptiveHash(bitResolution);
+							BufferedImage img = (BufferedImage) ImageIO.read(file2);
+							String jimagePHash = String.valueOf(hasher2.hash(img).toString(16));
+							String jimageAHash = String.valueOf(hasher.hash(img).toString(16));
 
-						// output json
-						jsonObject1.put("G_NO", String.valueOf(jsonObject.get("G_NO")));
-						jsonObject1.put("_SOUTCE_TIME", sdf.format(current));
-						jsonObject1.put("HASH_IMG", String.valueOf(jsonObject.get("G_IMG")).substring(0,
-								jsonObject.get("G_IMG").toString().length() - 4) + "_s.jpg");
-						jsonObject1.put("IMG_HASH_V1", jpHash); // jphash
-						jsonObject1.put("IMG_HASH_V2", jimagePHash); // JImageHash P_hash
-						jsonObject1.put("IMG_HASH_V3", jimageAHash); // JImageHash A_hash
-						fw.write(jsonObject1.toString() + "\r\n");
-						System.out.println(sdf.format(current));
-						System.out.println(String.valueOf(file2)); // 印出路徑
-						System.out.println(jsonObject1); // 印出json
+							// jphash
+							RadialHash hash = jpHash.getImageRadialHash("/mnt/" + imagePath);
+							String jpHash = String.valueOf(hash);
+
+							// output json
+							jsonObject1.put("G_NO", String.valueOf(jsonObject.get("G_NO")));
+							jsonObject1.put("_SOUTCE_TIME", sdf.format(current));
+							jsonObject1.put("HASH_IMG", String.valueOf(jsonObject.get("G_IMG")).substring(0,
+									jsonObject.get("G_IMG").toString().length() - 4) + "_s.jpg");
+							jsonObject1.put("IMG_HASH_V1", jpHash); // jphash
+							jsonObject1.put("IMG_HASH_V2", jimagePHash); // JImageHash P_hash
+							jsonObject1.put("IMG_HASH_V3", jimageAHash); // JImageHash A_hash
+							fw.write(jsonObject1.toString() + "\r\n");
+							System.out.println(sdf.format(current));
+							System.out.println(String.valueOf(file2)); // 印出路徑
+							System.out.println(jsonObject1); // 印出json
+
+						} catch (Exception e) {
+
+						}
+
 					}
 				}
 
