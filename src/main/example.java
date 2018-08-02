@@ -49,11 +49,11 @@ public class example {
 
 				// A_Hash
 				BigInteger A_Hash2 = hasher.hash(img2);
-				String A_binaryHash2 = A_Hash2.toString(2);
+				String A_binaryHash2 = A_Hash2.toString(16);
 
 				// P_Hash
 				BigInteger P_Hash2 = hasher2.hash(img2);
-				String P_binaryHash2 = P_Hash2.toString(2);
+				String P_binaryHash2 = P_Hash2.toString(16);
 
 				System.out.println(filenames[i]);
 				System.out.println("P_Hash_fingerPrint: " + P_binaryHash2);
@@ -69,10 +69,10 @@ public class example {
 
 				}
 
-				int A_dis = hammingDistance(new BigInteger(A_binaryHash1), new BigInteger(A_binaryHash2));
-				int P_dis = hammingDistance(new BigInteger(P_binaryHash1), new BigInteger(P_binaryHash2));
-				System.out.println("A_Hash Diatance:" + A_dis);
-				System.out.println("P_Hash Diatance:" + P_dis);
+				//int A_dis = hammingDistance(new BigInteger(A_binaryHash1), new BigInteger(A_binaryHash2));
+				//int P_dis = hammingDistance(new BigInteger(P_binaryHash1), new BigInteger(P_binaryHash2));
+				//System.out.println("A_Hash Diatance:" + A_dis);
+				//System.out.println("P_Hash Diatance:" + P_dis);
 				System.out.println("Similarity: " + jpHash.getSimilarity(hash1, hash2));
 				System.out.println("------------");
 
