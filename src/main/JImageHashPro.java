@@ -29,92 +29,98 @@ public class JImageHashPro {
 
 	public static void main(String[] args) throws IOException, ParseException {
 
-		int bitResolution = 64;
-		
-		System.out.println("inputPath: ");
-		Scanner scanner = new Scanner(System.in);
-		String inputPath = scanner.nextLine();
-		System.out.println("outputPath: ");
-		String outputPath = scanner.next();
+		try {
 
-		File file = new File(inputPath); // 讀取測試檔
-		FileReader fileReader = new FileReader(file);
-		BufferedReader bufferedReader = new BufferedReader(fileReader);
-		StringBuffer stringBuffer = new StringBuffer();
-		String line;
-		while ((line = bufferedReader.readLine()) != null) {
-			stringBuffer.append(line);
-			stringBuffer.append("\n");
-		}
-		fileReader.close();
+			int bitResolution = 64;
 
-		String[] arrayBF = stringBuffer.toString().split("}");// 切割字串
-		JSONParser parser = new JSONParser();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
-		FileWriter fw = new FileWriter(outputPath);
+			System.out.println("inputPath: ");
+			Scanner scanner = new Scanner(System.in);
+			String inputPath = scanner.nextLine();
+			System.out.println("outputPath: ");
+			String outputPath = scanner.next();
 
-		for (int i = 0; i < arrayBF.length - 1; i++) { // 拚imagePath
+			File file = new File(inputPath); // 讀取測試檔
+			FileReader fileReader = new FileReader(file);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			StringBuffer stringBuffer = new StringBuffer();
+			String line;
+			while ((line = bufferedReader.readLine()) != null) {
+				stringBuffer.append(line);
+				stringBuffer.append("\n");
+			}
+			fileReader.close();
 
-			Object obj = parser.parse(arrayBF[i] + "}");
-			JSONObject jsonObject = (JSONObject) obj;
-			JSONObject jsonObject1 = new JSONObject();
+			String[] arrayBF = stringBuffer.toString().split("\n");// 切割字串
+			JSONParser parser = new JSONParser();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
+			FileWriter fw = new FileWriter(outputPath);
 
-			if (String.valueOf(jsonObject.get("G_IMG")).contains("(null)")) {// 過濾G_IMG為(null)
+			for (int i = 0; i < arrayBF.length; i++) { // 拚imagePath
 
-			} else {
+				Object obj = parser.parse(arrayBF[i]);
+				JSONObject jsonObject = (JSONObject) obj;
+				JSONObject jsonObject1 = new JSONObject();
 
-				String imagePath = ImageUtility.getImgPath(String.valueOf(jsonObject.get("G_NO")),
-						String.valueOf(jsonObject.get("USER_NICK")), String.valueOf(jsonObject.get("G_STORAGE")))
-						+ String.valueOf(jsonObject.get("G_IMG")).substring(0,
-								jsonObject.get("G_IMG").toString().length() - 4)
-						+ "_s.jpg";
-				File file2 = new File("/mnt/" + imagePath);
+				if (String.valueOf(jsonObject.get("G_IMG")).contains("(null)")) {// 過濾G_IMG為(null)
 
-				if (imagePath.contains("null") || imagePath.contains(",") || imagePath.contains("gif")
+				} else {
 
-						|| imagePath.contains("png") || imagePath.contains("bmp") || imagePath.contains("jpeg")) {
+					String imagePath = ImageUtility.getImgPath(String.valueOf(jsonObject.get("G_NO")),
+							String.valueOf(jsonObject.get("USER_NICK")), String.valueOf(jsonObject.get("G_STORAGE")))
+							+ String.valueOf(jsonObject.get("G_IMG")).substring(0,
+									jsonObject.get("G_IMG").toString().length() - 4)
+							+ "_s.jpg";
+					File file2 = new File("/mnt/" + imagePath);
 
-				} else if (file2.exists() && !file2.isDirectory()) {
+					if (imagePath.contains("null") || imagePath.contains(",") || imagePath.contains("gif")
 
-					try {
+							|| imagePath.contains("png") || imagePath.contains("bmp") || imagePath.contains("jpeg")) {
 
-						Date current = new Date();
+					} else if (file2.exists() && !file2.isDirectory()) {
 
-						// JImagaHash
-						HashingAlgorithm hasher = new AverageHash(bitResolution);
-						HashingAlgorithm hasher2 = new PerceptiveHash(bitResolution);
-						BufferedImage img = (BufferedImage) ImageIO.read(file2);
-						String jimagePHash = String.valueOf(hasher2.hash(img).toString(16));
-						String jimageAHash = String.valueOf(hasher.hash(img).toString(16));
+						try {
 
-						// jphash
-						RadialHash hash = jpHash.getImageRadialHash("/mnt/" + imagePath);
-						String jpHash = String.valueOf(hash);
+							Date current = new Date();
 
-						// output json
-						jsonObject1.put("G_NO", String.valueOf(jsonObject.get("G_NO")));
-						jsonObject1.put("_SOUTCE_TIME", sdf.format(current));
-						jsonObject1.put("HASH_IMG", String.valueOf(jsonObject.get("G_IMG")).substring(0,
-								jsonObject.get("G_IMG").toString().length() - 4) + "_s.jpg");
-						jsonObject1.put("IMG_HASH_V1", jpHash); // jphash
-						jsonObject1.put("IMG_HASH_V2", jimagePHash); // JImageHash P_hash
-						jsonObject1.put("IMG_HASH_V3", jimageAHash); // JImageHash A_hash
-						fw.write(jsonObject1.toString() + "\r\n");
-						System.out.println(sdf.format(current));
-						System.out.println(String.valueOf(file2)); // 印出路徑
-						System.out.println(jsonObject1); // 印出json
+							// JImagaHash
+							HashingAlgorithm hasher = new AverageHash(bitResolution);
+							HashingAlgorithm hasher2 = new PerceptiveHash(bitResolution);
+							BufferedImage img = (BufferedImage) ImageIO.read(file2);
+							String jimagePHash = String.valueOf(hasher2.hash(img).toString(16));
+							String jimageAHash = String.valueOf(hasher.hash(img).toString(16));
 
-					} catch (IIOException e) {
+							// jphash
+							RadialHash hash = jpHash.getImageRadialHash("/mnt/" + imagePath);
+							String jpHash = String.valueOf(hash);
 
-						e.printStackTrace();
+							// output json
+							jsonObject1.put("G_NO", String.valueOf(jsonObject.get("G_NO")));
+							jsonObject1.put("_SOUTCE_TIME", sdf.format(current));
+							jsonObject1.put("HASH_IMG", String.valueOf(jsonObject.get("G_IMG")).substring(0,
+									jsonObject.get("G_IMG").toString().length() - 4) + "_s.jpg");
+							jsonObject1.put("IMG_HASH_V1", jpHash); // jphash
+							jsonObject1.put("IMG_HASH_V2", jimagePHash); // JImageHash P_hash
+							jsonObject1.put("IMG_HASH_V3", jimageAHash); // JImageHash A_hash
+							fw.write(jsonObject1.toString() + "\r\n");
+							System.out.println(sdf.format(current));
+							System.out.println(String.valueOf(file2)); // 印出路徑
+							System.out.println(jsonObject1); // 印出json
+
+						} catch (IIOException e) {
+
+							e.printStackTrace();
+
+						}
 
 					}
-
 				}
-			}
 
+			}
+			fw.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		fw.close();
 
 	}
 
