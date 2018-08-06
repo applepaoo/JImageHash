@@ -112,7 +112,7 @@ public class JImageHashPro {
 					}
 				}
 			}
-			fw.close();1
+			fw.close();
 
 		} catch (IOException e) {
 			e.printStackTrace();
