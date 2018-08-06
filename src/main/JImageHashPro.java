@@ -72,9 +72,7 @@ public class JImageHashPro {
 							+ "_s.jpg";
 					File file2 = new File("/mnt/" + imagePath);
 
-					if (imagePath.contains("null") || imagePath.contains(",") || imagePath.contains("gif")
-
-							|| imagePath.contains("png") || imagePath.contains("bmp") || imagePath.contains("jpeg")) {
+					if (imagePath.contains("null") || imagePath.contains(",") || imagePath.contains("gif")) {
 
 					} else if (file2.exists() && !file2.isDirectory()) {
 
@@ -107,14 +105,12 @@ public class JImageHashPro {
 							System.out.println(jsonObject1); // 印出json
 
 						} catch (IIOException e) {
-
 							e.printStackTrace();
-
+						} catch (IllegalArgumentException e) {
+							e.printStackTrace();
 						}
-
 					}
 				}
-
 			}
 			fw.close();
 

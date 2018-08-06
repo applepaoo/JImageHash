@@ -32,6 +32,9 @@ public class JImageHashTest {
 		try {
 
 			int bitResolution = 64;
+			int originalSum = 0;
+			int pathSum = 0;
+			int sum = 0;
 
 			System.out.println("inputPath: ");
 			Scanner scanner = new Scanner(System.in);
@@ -54,6 +57,7 @@ public class JImageHashTest {
 			JSONParser parser = new JSONParser();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
 			FileWriter fw = new FileWriter(outputPath);
+			originalSum = arrayBF.length;
 
 			for (int i = 0; i < arrayBF.length; i++) { // 拚imagePath
 
@@ -71,46 +75,54 @@ public class JImageHashTest {
 									jsonObject.get("G_IMG").toString().length() - 4)
 							+ "_s.jpg";
 					File file2 = new File("/mnt/" + imagePath);
+					pathSum = pathSum + 1;
 
-					if (imagePath.contains("null") || imagePath.contains(",") || imagePath.contains("gif")
-
-							|| imagePath.contains("png") || imagePath.contains("bmp") || imagePath.contains("jpeg")) {
+					if (imagePath.contains("null") || imagePath.contains(",") || imagePath.contains("gif")) {
 
 					} else if (file2.exists() && !file2.isDirectory()) {
 
-						Date current = new Date();
+						sum = sum + 1;
 
-						// JImagaHash
-						HashingAlgorithm hasher = new AverageHash(bitResolution);
-						HashingAlgorithm hasher2 = new PerceptiveHash(bitResolution);
-						BufferedImage img = (BufferedImage) ImageIO.read(file2);
-						String jimagePHash = String.valueOf(hasher2.hash(img).toString(16));
-						String jimageAHash = String.valueOf(hasher.hash(img).toString(16));
-
-						// jphash
-						RadialHash hash = jpHash.getImageRadialHash("/mnt/" + imagePath);
-						String jpHash = String.valueOf(hash);
-
-						// output json
-						jsonObject1.put("G_NO", String.valueOf(jsonObject.get("G_NO")));
-						jsonObject1.put("_SOUTCE_TIME", sdf.format(current));
-						jsonObject1.put("HASH_IMG", String.valueOf(jsonObject.get("G_IMG")).substring(0,
-								jsonObject.get("G_IMG").toString().length() - 4) + "_s.jpg");
-						jsonObject1.put("IMG_HASH_V1", jpHash); // jphash
-						jsonObject1.put("IMG_HASH_V2", jimagePHash); // JImageHash P_hash
-						jsonObject1.put("IMG_HASH_V3", jimageAHash); // JImageHash A_hash
-						fw.write(jsonObject1.toString() + "\r\n");
-						System.out.println(sdf.format(current));
-						System.out.println(String.valueOf(file2)); // 印出路徑
-						System.out.println(jsonObject1); // 印出json
+						// Date current = new Date();
+						//
+						// // JImagaHash
+						// HashingAlgorithm hasher = new AverageHash(bitResolution);
+						// HashingAlgorithm hasher2 = new PerceptiveHash(bitResolution);
+						// BufferedImage img = (BufferedImage) ImageIO.read(file2);
+						// String jimagePHash = String.valueOf(hasher2.hash(img).toString(16));
+						// String jimageAHash = String.valueOf(hasher.hash(img).toString(16));
+						//
+						// // jphash
+						// RadialHash hash = jpHash.getImageRadialHash("/mnt/" + imagePath);
+						// String jpHash = String.valueOf(hash);
+						//
+						// // output json
+						// jsonObject1.put("G_NO", String.valueOf(jsonObject.get("G_NO")));
+						// jsonObject1.put("_SOUTCE_TIME", sdf.format(current));
+						// jsonObject1.put("HASH_IMG",
+						// String.valueOf(jsonObject.get("G_IMG")).substring(0,
+						// jsonObject.get("G_IMG").toString().length() - 4) + "_s.jpg");
+						// jsonObject1.put("IMG_HASH_V1", jpHash); // jphash
+						// jsonObject1.put("IMG_HASH_V2", jimagePHash); // JImageHash P_hash
+						// jsonObject1.put("IMG_HASH_V3", jimageAHash); // JImageHash A_hash
+						// fw.write(jsonObject1.toString() + "\r\n");
+						// System.out.println(sdf.format(current));
+						// System.out.println(String.valueOf(file2)); // 印出路徑
+						// System.out.println(jsonObject1); // 印出json
 
 					}
+
 				}
 
 			}
-			fw.close();
+			// fw.close();
+			System.out.println("original: " + originalSum);
+			System.out.println("not null: " + pathSum);
+			System.out.println("exist: " + sum);
 
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		}
 
