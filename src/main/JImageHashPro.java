@@ -111,7 +111,7 @@ public class JImageHashPro {
 						}
 					}
 				}
-			}
+			}1
 			fw.close();
 
 		} catch (IOException e) {
