@@ -68,7 +68,7 @@ public class JImageHashPro {
 					String imagePath = ImageUtility.getImgPath(String.valueOf(jsonObject.get("G_NO")),
 							String.valueOf(jsonObject.get("USER_NICK")), String.valueOf(jsonObject.get("G_STORAGE")))
 							+ String.valueOf(jsonObject.get("G_IMG")).substring(0,
-									jsonObject.get("G_IMG").toString().length() - 4)
+									String.valueOf(jsonObject.get("G_IMG")).length() - 4)
 							+ "_s.jpg";
 					File file2 = new File("/mnt/" + imagePath);
 
@@ -115,6 +115,8 @@ public class JImageHashPro {
 			fw.close();
 
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (StringIndexOutOfBoundsException e) { // G_IMG substring問題
 			e.printStackTrace();
 		}
 
