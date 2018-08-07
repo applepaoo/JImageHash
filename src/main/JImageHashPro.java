@@ -117,7 +117,7 @@ public class JImageHashPro {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (StringIndexOutOfBoundsException e) { // G_IMG substring問題
-			e.printStackTrace();
+			e.printStackTrace();test
 		}
 
 	}
