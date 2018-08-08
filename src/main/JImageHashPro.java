@@ -29,7 +29,7 @@ public class JImageHashPro {
 
 	public static void main(String[] args) throws IOException, ParseException {
 		int bitResolution = 64;
-1
+
 		System.out.println("inputPath: ");
 		Scanner scanner = new Scanner(System.in);
 		String inputPath = scanner.nextLine();
