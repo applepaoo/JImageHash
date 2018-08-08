@@ -28,7 +28,6 @@ import tw.com.ruten.util.ImageUtility;
 public class JImageHashPro {
 
 	public static void main(String[] args) throws IOException, ParseException {
-
 		int bitResolution = 64;
 
 		System.out.println("inputPath: ");
