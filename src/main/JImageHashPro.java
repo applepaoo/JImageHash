@@ -60,18 +60,18 @@ public class JImageHashPro {
 				JSONObject jsonObject = (JSONObject) obj;
 				JSONObject jsonObject1 = new JSONObject();
 
-				if (String.valueOf(jsonObject.get("G_IMG")).contains("(null)")) {// 過濾G_IMG為(null)
+				if (String.valueOf(jsonObject.get("G_IMG")).contains("(null)")
+						|| !String.valueOf(jsonObject.get("G_IMG")).contains(",")) {// 過濾G_IMG為(null)
 
 				} else {
 
+					String[] G_IMGPath = String.valueOf(jsonObject.get("G_IMG")).split(",");
 					String imagePath = ImageUtility.getImgPath(String.valueOf(jsonObject.get("G_NO")),
 							String.valueOf(jsonObject.get("USER_NICK")), String.valueOf(jsonObject.get("G_STORAGE")))
-							+ String.valueOf(jsonObject.get("G_IMG")).substring(0,
-									String.valueOf(jsonObject.get("G_IMG")).length() - 4)
-							+ "_s.jpg";
+							+ G_IMGPath[0].substring(0, G_IMGPath[0].length() - 4) + "_s.jpg";
 					File file2 = new File("/mnt/" + imagePath);
 
-					if (imagePath.contains("null") || imagePath.contains(",") || imagePath.contains("gif")) {
+					if (imagePath.contains("null") || imagePath.contains("gif")) {
 
 					} else if (file2.exists() && !file2.isDirectory()) {
 
@@ -91,8 +91,7 @@ public class JImageHashPro {
 						// output json
 						jsonObject1.put("G_NO", String.valueOf(jsonObject.get("G_NO")));
 						jsonObject1.put("_SOUTCE_TIME", sdf.format(current));
-						jsonObject1.put("HASH_IMG", String.valueOf(jsonObject.get("G_IMG")).substring(0,
-								jsonObject.get("G_IMG").toString().length() - 4) + "_s.jpg");
+						jsonObject1.put("HASH_IMG", G_IMGPath[0].substring(0, G_IMGPath[0].length() - 4) + "_s.jpg");
 						jsonObject1.put("IMG_HASH_V1", jpHash); // jphash
 						jsonObject1.put("IMG_HASH_V2", jimagePHash); // JImageHash P_hash
 						jsonObject1.put("IMG_HASH_V3", jimageAHash); // JImageHash A_hash
