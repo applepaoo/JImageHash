@@ -28,7 +28,6 @@ import tw.com.ruten.util.ImageUtility;
 public class JImageHashPro {
 
 	public static void main(String[] args) throws IOException, ParseException {
-		int bitResolution = 64;
 
 		System.out.println("inputPath: ");
 		Scanner scanner = new Scanner(System.in);
@@ -63,41 +62,49 @@ public class JImageHashPro {
 				if (String.valueOf(jsonObject.get("G_IMG")).contains("(null)")) {// 過濾G_IMG為(null)
 
 				} else {
+					String[] G_IMGPath = String.valueOf(jsonObject.get("G_IMG")).split(",");// 如果有多個G_IMG取第一個
+					String G_IMGPath1 = G_IMGPath[0].toString(); // 第一個G_IMG
+					if (G_IMGPath[0].contains(".")) { // 篩選副檔名
 
-					String[] G_IMGPath = String.valueOf(jsonObject.get("G_IMG")).split(",");
-					String imagePath = ImageUtility.getImgPath(String.valueOf(jsonObject.get("G_NO")),
-							String.valueOf(jsonObject.get("USER_NICK")), String.valueOf(jsonObject.get("G_STORAGE")))
-							+ G_IMGPath[0].substring(0, G_IMGPath[0].length() - 4) + "_s.jpg";
-					File file2 = new File("/mnt/" + imagePath);
+						String[] G_IMGPath2 = G_IMGPath1.split("\\."); // 擷取副檔名
+						try {
+							String imageName = G_IMGPath2[0]; // IMG name
+							String str = G_IMGPath2[1]; // 副檔名名稱
+							switch (str) {
+							case "jpg":
+								getFingerPrint(str, jsonObject, jsonObject1, imageName, sdf, fw); // (副檔名, 接json,
+																									// 出json, 第一張圖, 時間,
+																									// 寫出)
+								break;
 
-					if (imagePath.contains("null") || imagePath.contains("gif")) {
+							case "jpeg":
+								getFingerPrint(str, jsonObject, jsonObject1, imageName, sdf, fw);
+								break;
 
-					} else if (file2.exists() && !file2.isDirectory()) {
+							case "JPG":
+								getFingerPrint(str, jsonObject, jsonObject1, imageName, sdf, fw);
+								break;
 
-						Date current = new Date();
+							case "JPEG":
+								getFingerPrint(str, jsonObject, jsonObject1, imageName, sdf, fw);
+								break;
 
-						// JImagaHash
-						HashingAlgorithm hasher = new AverageHash(bitResolution);
-						HashingAlgorithm hasher2 = new PerceptiveHash(bitResolution);
-						BufferedImage img = (BufferedImage) ImageIO.read(file2);
-						String jimagePHash = String.valueOf(hasher2.hash(img).toString(16));
-						String jimageAHash = String.valueOf(hasher.hash(img).toString(16));
+							case "png":
+								getFingerPrint(str, jsonObject, jsonObject1, imageName, sdf, fw);
+								break;
 
-						// jphash
-						RadialHash hash = jpHash.getImageRadialHash("/mnt/" + imagePath);
-						String jpHash = String.valueOf(hash);
+							case "PNG":
+								getFingerPrint(str, jsonObject, jsonObject1, imageName, sdf, fw);
+								break;
 
-						// output json
-						jsonObject1.put("G_NO", String.valueOf(jsonObject.get("G_NO")));
-						jsonObject1.put("_SOUTCE_TIME", sdf.format(current));
-						jsonObject1.put("HASH_IMG", G_IMGPath[0].substring(0, G_IMGPath[0].length() - 4) + "_s.jpg");
-						jsonObject1.put("IMG_HASH_V1", jpHash); // jphash
-						jsonObject1.put("IMG_HASH_V2", jimagePHash); // JImageHash P_hash
-						jsonObject1.put("IMG_HASH_V3", jimageAHash); // JImageHash A_hash
-						fw.write(jsonObject1.toString() + "\r\n");
-						System.out.println(sdf.format(current));
-						System.out.println(String.valueOf(file2)); // 印出路徑
-						System.out.println(jsonObject1); // 印出json
+							case "Jpg":
+								getFingerPrint(str, jsonObject, jsonObject1, imageName, sdf, fw);
+								break;
+
+							}
+						} catch (ArrayIndexOutOfBoundsException e) {
+							continue;
+						}
 
 					}
 				}
@@ -115,4 +122,45 @@ public class JImageHashPro {
 
 	}
 
+	static void getFingerPrint(String str, JSONObject jsonObject, JSONObject jsonObject1, String imageName,
+			SimpleDateFormat sdf, FileWriter fw) throws IOException {
+
+		int bitResolution = 64;
+
+		String imagePath = ImageUtility.getImgPath(String.valueOf(jsonObject.get("G_NO")),
+				String.valueOf(jsonObject.get("USER_NICK")), String.valueOf(jsonObject.get("G_STORAGE"))) + imageName
+				+ "_s." + str;
+
+		File file2 = new File("/mnt/" + imagePath);
+
+		if (imagePath.contains("null")) {
+
+		} else {
+
+			// System.out.println(imagePath);
+			Date current = new Date();
+			HashingAlgorithm hasher = new AverageHash(bitResolution);
+			HashingAlgorithm hasher2 = new PerceptiveHash(bitResolution);
+			BufferedImage img = (BufferedImage) ImageIO.read(file2);
+			String jimagePHash = String.valueOf(hasher2.hash(img).toString(16));
+			String jimageAHash = String.valueOf(hasher.hash(img).toString(16));
+
+			// jphash
+			RadialHash hash = jpHash.getImageRadialHash("/mnt/" + imagePath);
+			String jpHash = String.valueOf(hash);
+
+			// output json
+			jsonObject1.put("G_NO", String.valueOf(jsonObject.get("G_NO")));
+			jsonObject1.put("_SOUTCE_TIME", sdf.format(current));
+			jsonObject1.put("HASH_IMG", imageName + "_s." + str);
+			jsonObject1.put("IMG_HASH_V1", jpHash); // jphash
+			jsonObject1.put("IMG_HASH_V2", jimagePHash); // JImageHash P_hash
+			jsonObject1.put("IMG_HASH_V3", jimageAHash); // JImageHash A_hash
+			fw.write(jsonObject1.toString() + "\r\n");
+			System.out.println(sdf.format(current));
+			System.out.println(String.valueOf(file2)); // 印出路徑
+			System.out.println(jsonObject1); // 印出json
+
+		}
+	}
 }
