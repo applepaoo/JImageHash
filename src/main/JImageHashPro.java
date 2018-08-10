@@ -60,8 +60,7 @@ public class JImageHashPro {
 				JSONObject jsonObject = (JSONObject) obj;
 				JSONObject jsonObject1 = new JSONObject();
 
-				if (String.valueOf(jsonObject.get("G_IMG")).contains("(null)")
-						|| !String.valueOf(jsonObject.get("G_IMG")).contains(",")) {// 過濾G_IMG為(null)
+				if (String.valueOf(jsonObject.get("G_IMG")).contains("(null)")) {// 過濾G_IMG為(null)
 
 				} else {
 
