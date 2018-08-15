@@ -152,7 +152,7 @@ public class JImageHashPro {
 
 			// output json
 			jsonObject1.put("G_NO", String.valueOf(jsonObject.get("G_NO")));
-			jsonObject1.put("_SOUTCE_TIME", sdf.format(current));
+			jsonObject1.put("_SOURCE_TIME", sdf.format(current));
 			jsonObject1.put("HASH_IMG", imageName);
 			jsonObject1.put("IMG_HASH_V1", jpHash); // jphash
 			jsonObject1.put("IMG_HASH_V2", jimagePHash); // JImageHash P_hash

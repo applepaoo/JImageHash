@@ -13,20 +13,15 @@ import java.util.Scanner;
 import javax.imageio.IIOException;
 import javax.imageio.ImageIO;
 
-import org.apache.hadoop.classification.InterfaceAudience.Public;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import com.pragone.jphash.jpHash;
-import com.pragone.jphash.image.radial.RadialHash;
-
-import hashAlgorithms.AverageHash;
 import hashAlgorithms.HashingAlgorithm;
 import hashAlgorithms.PerceptiveHash;
 import tw.com.ruten.util.ImageUtility;
 
-public class JImageHashProV1 {
+public class JImageHashTag {
 
 	public static void main(String[] args) throws IOException, ParseException {
 
@@ -116,6 +111,8 @@ public class JImageHashProV1 {
 				continue;
 			} catch (StringIndexOutOfBoundsException e) {
 				continue;
+			} catch (Exception e) {
+				continue;
 			}
 
 		}
@@ -129,8 +126,8 @@ public class JImageHashProV1 {
 		int bitResolution = 64;
 
 		String imagePath = ImageUtility.getImgPath(String.valueOf(jsonObject.get("G_NO")),
-				String.valueOf(jsonObject.get("USER_NICK")), String.valueOf(jsonObject.get("G_STORAGE")))
-				+ imageName + "_s." + str;
+				String.valueOf(jsonObject.get("USER_NICK")), String.valueOf(jsonObject.get("G_STORAGE"))) + imageName
+				+ "_s." + str;
 
 		File file2 = new File("/mnt/" + imagePath);
 
@@ -138,25 +135,17 @@ public class JImageHashProV1 {
 
 		} else {
 
-			// System.out.println(imagePath);
 			Date current = new Date();
-			HashingAlgorithm hasher = new AverageHash(bitResolution);
-			HashingAlgorithm hasher2 = new PerceptiveHash(bitResolution);
+			HashingAlgorithm hasher = new PerceptiveHash(bitResolution);
 			BufferedImage img = (BufferedImage) ImageIO.read(file2);
-			String jimagePHash = String.valueOf(hasher2.hash(img).toString(16));
-			String jimageAHash = String.valueOf(hasher.hash(img).toString(16));
-
-			// jphash
-			RadialHash hash = jpHash.getImageRadialHash("/mnt/" + imagePath);
-			String jpHash = String.valueOf(hash);
+			String jimagePHash = String.valueOf(hasher.hash(img).toString(16));
 
 			// output json
 			jsonObject1.put("G_NO", String.valueOf(jsonObject.get("G_NO")));
-			jsonObject1.put("_SOUTCE_TIME", sdf.format(current));
-			jsonObject1.put("HASH_IMG", imageName + "_s." + str);
-			jsonObject1.put("IMG_HASH_V1", jpHash); // jphash
-			jsonObject1.put("IMG_HASH_V2", jimagePHash); // JImageHash P_hash
-			jsonObject1.put("IMG_HASH_V3", jimageAHash); // JImageHash A_hash
+			jsonObject1.put("_SOURCE_TIME", sdf.format(current));
+			jsonObject1.put("HASH_IMG", imageName);
+			jsonObject1.put("IMG_HASH", jimagePHash); // JImagePhash
+
 			fw.write(jsonObject1.toString() + "\r\n");
 			System.out.println(sdf.format(current));
 			System.out.println(String.valueOf(file2)); // 印出路徑
